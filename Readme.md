@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Sergey Ryabov](https://up.htmlacademy.ru/javascript/9/user/161145).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Беккиев](https://htmlacademy.ru/profile/id389981).
 
 ---
 
