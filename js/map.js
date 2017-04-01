@@ -11,14 +11,14 @@ var MAP_CLASS = 'tokyo__pin-map';
 var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
 appendAds(adsHTML, MAP_CLASS);
-generateFeatured(adsList[0]);
+generateLodge(adsList[0]);
 
 function generateAds() {
   var adList = [];
 
   for (var i = 1; i <= AD_LIST_LENGTH; i++) {
     var imgNum = i > 9 ? i : '0' + i;
-    var offerTitle = TITLE_LIST[TITLE_LIST.length % i];
+    var offerTitle = TITLE_LIST[i / TITLE_LIST.length];
     var offerPrice = getRandomIntInclusive(1000, 1000000);
     var offerType = TYPE_LIST[getRandomIntInclusive(0, 2)];
     var offerRooms = getRandomIntInclusive(1, 5);
@@ -39,12 +39,14 @@ function generateAds() {
 
 function generateAdsHTML(adsList) {
   var fragment = document.createDocumentFragment();
+  var markerWidth = 56;
+  var marketHeight = 75;
 
   for (var i = 0; i < adsList.length; i++) {
     var adElement = document.createElement('div');
     adElement.className = 'pin';
-    adElement.style.left = adsList[i].location.x + 'px'; //TOFIX
-    adElement.style.top = adsList[i].location.y + 'px'; //TOFIX
+    adElement.style.left = (adsList[i].location.x - markerWidth / 2) + 'px';
+    adElement.style.top = (adsList[i].location.y - marketHeight) + 'px';
 
     var adElementImg = document.createElement('img');
     adElementImg.src = adsList[i].author.avatar;
@@ -62,7 +64,7 @@ function appendAds(adsHTML, mapClass) {
   map.appendChild(adsHTML);
 }
 
-function generateFeatured(featuredItem) {
+function generateLodge(featuredItem) {
   var template = document.querySelector('#lodge-template');
   var lodgeMockup = document.querySelector('#offer-dialog');
   var lodge = template.content.cloneNode(true);
@@ -101,6 +103,14 @@ function Ad(avatarNum, title, price, type, rooms, guests, checkin, checkout, fea
   }
 }
 
+function getMarkerStyle(styleName) {
+  var element = document.querySelector('.pin');
+  var style = window.getComputedStyle(element);
+  var value = parseInt(style.getPropertyValue(styleName));
+
+  return value;
+}
+
 function translateType(type) {
   switch (type) {
     case 'flat':
@@ -125,12 +135,6 @@ function getFormattedFeatures(featuresList) {
   return fragment;
 }
 
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 function getRandomElements(list) {
   var randomList = [];
   var counter = 0;
@@ -142,4 +146,11 @@ function getRandomElements(list) {
   }
 
   return randomList;
+}
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
