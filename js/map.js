@@ -37,19 +37,19 @@ function generateAds() {
   return adList;
 }
 
-function generateAdsHTML(adsList) {
+function generateAdsHTML(list) {
   var fragment = document.createDocumentFragment();
   var markerWidth = 56;
   var marketHeight = 75;
 
-  for (var i = 0; i < adsList.length; i++) {
+  for (var i = 0; i < list.length; i++) {
     var adElement = document.createElement('div');
     adElement.className = 'pin';
-    adElement.style.left = (adsList[i].location.x - markerWidth / 2) + 'px';
-    adElement.style.top = (adsList[i].location.y - marketHeight) + 'px';
+    adElement.style.left = (list[i].location.x - markerWidth / 2) + 'px';
+    adElement.style.top = (list[i].location.y - marketHeight) + 'px';
 
     var adElementImg = document.createElement('img');
-    adElementImg.src = adsList[i].author.avatar;
+    adElementImg.src = list[i].author.avatar;
 
     adElement.appendChild(adElementImg);
     fragment.appendChild(adElement);
@@ -58,10 +58,10 @@ function generateAdsHTML(adsList) {
   return fragment;
 }
 
-function appendAds(adsHTML, mapClass) {
-  var map = document.querySelector('.tokyo__pin-map');
+function appendAds(ads) {
+  var map = document.querySelector(MAP_CLASS);
 
-  map.appendChild(adsHTML);
+  map.appendChild(ads);
 }
 
 function generateLodge(featuredItem) {
@@ -94,32 +94,39 @@ function Ad(avatarNum, title, price, type, rooms, guests, checkin, checkout, fea
     checkin: checkin,
     checkout: checkout,
     features: features,
-    description: "",
+    description: '',
     photos: [],
   };
   this.location = {
     x: x,
     y: y,
-  }
+  };
 }
 
-function getMarkerStyle(styleName) {
-  var element = document.querySelector('.pin');
-  var style = window.getComputedStyle(element);
-  var value = parseInt(style.getPropertyValue(styleName));
-
-  return value;
-}
+// function getMarkerStyle(styleName) {
+//   var element = document.querySelector('.pin');
+//   var style = window.getComputedStyle(element);
+//   var value = parseInt(style.getPropertyValue(styleName));
+//
+//   return value;
+// }
 
 function translateType(type) {
+  var translatedType;
+
   switch (type) {
     case 'flat':
-      return 'Квартира';
+      translatedType = 'Квартира';
+      break;
     case 'bungalo':
-      return 'Бунгало';
+      translatedType = 'Бунгало';
+      break;
     case 'house':
-      return 'Дом';
+      translatedType = 'Дом';
+      break;
   }
+
+  return translatedType;
 }
 
 function getFormattedFeatures(featuresList) {
