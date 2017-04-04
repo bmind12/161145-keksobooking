@@ -26,8 +26,8 @@ var MAP_CLASS = 'tokyo__pin-map';
 var MARKER_WIDTH = 56;
 var MARKER_HEIGHT = 75;
 /*
-  Перенес эти переменные наверх. Если их оставить перед функцией, они не успевают декларироваться.
-*/
+ Перенес эти переменные наверх. Если их оставить перед функцией, они не успевают декларироваться.
+ */
 
 var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
@@ -105,8 +105,8 @@ function generateLodge(featuredItem) {
     + featuredItem.offer.checkin + ', выезд до ' + featuredItem.offer.checkout);
   /*
    Не уверен на счет такого переноса параметров. Но а как быть? Они даже в
-    одну строку в переменную не помещаются.
-  */
+   одну строку в переменную не помещаются.
+   */
   fillLodgeElement(lodge, 'description', featuredItem.offer.description);
 
   var lodgePrice = featuredItem.offer.price + '&#x20bd;/ночь';
@@ -117,7 +117,7 @@ function generateLodge(featuredItem) {
   /*
    Не знаю насколько это нормально - создавать пару переменных, только потому,
    что они не влазят в ширину строки. А если быть последовательеым и все
-    параметры в переменные загонять, то становиться грамоздко.
+   параметры в переменные загонять, то становиться грамоздко.
    */
 
   lodgeMockup.replaceChild(lodge, lodgeMockup.querySelector('.dialog__panel'));
@@ -152,7 +152,7 @@ function createAd(adData) {
       x: adData.locationX,
       y: adData.locationY,
     },
-  }
+  };
 
   return ad;
 }
@@ -175,7 +175,7 @@ function generateFeaturesIcons(features) {
 
   for (var i = 0; i < features.length; i++) {
     var feature = document.createElement('span');
-    feature.classList.add('feature__image'); //createFeature
+    feature.classList.add('feature__image'); // createFeature
     feature.classList.add('feature__image--' + features[i]);
     fragment.appendChild(feature);
   }
