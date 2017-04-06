@@ -25,9 +25,6 @@ var AD_LIST_LENGTH = 8;
 var MAP_CLASS = 'tokyo__pin-map';
 var MARKER_WIDTH = 56;
 var MARKER_HEIGHT = 75;
-/*
- Перенес эти переменные наверх. Если их оставить перед функцией, они не успевают декларироваться.
- */
 
 var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
@@ -96,29 +93,27 @@ function generateLodge(featuredItem) {
   var lodgeMockup = document.querySelector('#offer-dialog');
   var lodge = template.content.cloneNode(true);
 
+  var guestsText = 'Для ' + featuredItem.offer.guests + ' гостей в ' +
+    featuredItem.offer.rooms + ' комнатах';
+  var timeText = 'Заезд после ' + featuredItem.offer.checkin + ', выезд до ' +
+    featuredItem.offer.checkout;
+
   fillLodgeElement(lodge, 'title', featuredItem.offer.title);
   fillLodgeElement(lodge, 'address', featuredItem.offer.address);
   fillLodgeElement(lodge, 'type', translateType(featuredItem.offer.type));
-  fillLodgeElement(lodge, 'rooms-and-guests', 'Для ' + featuredItem.offer.guests
-    + ' гостей в ' + featuredItem.offer.rooms + ' комнатах');
-  fillLodgeElement(lodge, 'checkin-time', 'Заезд после '
-    + featuredItem.offer.checkin + ', выезд до ' + featuredItem.offer.checkout);
-  /*
-   Не уверен на счет такого переноса параметров. Но а как быть? Они даже в
-   одну строку в переменную не помещаются.
-   */
+  fillLodgeElement(lodge, 'rooms-and-guests', guestsText);
+  fillLodgeElement(lodge, 'checkin-time', timeText);
   fillLodgeElement(lodge, 'description', featuredItem.offer.description);
 
-  var lodgePrice = featuredItem.offer.price + '&#x20bd;/ночь';
-  lodge.querySelector('.lodge__price').innerHTML = lodgePrice;
+  lodge
+  .querySelector('.lodge__price')
+  .innerHTML = featuredItem.offer.price + '&#x20bd;/ночь';
 
-  var lodgeFeaturesIcons = generateFeaturesIcons(featuredItem.offer.features);
-  lodge.querySelector('.lodge__features').appendChild(lodgeFeaturesIcons);
-  /*
-   Не знаю насколько это нормально - создавать пару переменных, только потому,
-   что они не влазят в ширину строки. А если быть последовательеым и все
-   параметры в переменные загонять, то становиться грамоздко.
-   */
+  lodge
+  .querySelector('.lodge__features')
+  .appendChild(
+    generateFeaturesIcons(featuredItem.offer.features)
+  );
 
   lodgeMockup.replaceChild(lodge, lodgeMockup.querySelector('.dialog__panel'));
 }
@@ -130,7 +125,6 @@ function fillLodgeElement(lodge, element, content) {
 }
 
 function createAd(adData) {
-
   var ad = {
     author: {
       avatar: 'img/avatars/user{{' + adData.imgNum + '}}.png',
@@ -158,7 +152,6 @@ function createAd(adData) {
 }
 
 function translateType(type) {
-
   var typeDictionary = {
     flat: 'Квартира',
     bungalo: 'Бунгало',
@@ -175,7 +168,7 @@ function generateFeaturesIcons(features) {
 
   for (var i = 0; i < features.length; i++) {
     var feature = document.createElement('span');
-    feature.classList.add('feature__image'); // createFeature
+    feature.classList.add('feature__image');
     feature.classList.add('feature__image--' + features[i]);
     fragment.appendChild(feature);
   }
