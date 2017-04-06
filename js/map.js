@@ -106,14 +106,12 @@ function generateLodge(featuredItem) {
   fillLodgeElement(lodge, 'description', featuredItem.offer.description);
 
   lodge
-  .querySelector('.lodge__price')
-  .innerHTML = featuredItem.offer.price + '&#x20bd;/ночь';
+    .querySelector('.lodge__price')
+    .innerHTML = featuredItem.offer.price + '&#x20bd;/ночь';
 
   lodge
-  .querySelector('.lodge__features')
-  .appendChild(
-    generateFeaturesIcons(featuredItem.offer.features)
-  );
+    .querySelector('.lodge__features')
+    .appendChild(generateFeaturesIcons(featuredItem.offer.features));
 
   lodgeMockup.replaceChild(lodge, lodgeMockup.querySelector('.dialog__panel'));
 }
