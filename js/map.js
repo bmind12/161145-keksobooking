@@ -22,14 +22,14 @@ var FEATURES_LIST = [
   'conditioner'
 ];
 var AD_LIST_LENGTH = 8;
-var MAP_CLASS = 'tokyo__pin-map';
 var MARKER_WIDTH = 56;
 var MARKER_HEIGHT = 75;
 
 var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
+var map = document.querySelector('.tokyo__pin-map');
 
-appendAds(adsHTML, MAP_CLASS);
+map.appendChild(adsHTML);
 generateLodge(adsList[0]);
 
 function generateAds() {
@@ -77,15 +77,11 @@ function createAdElement(elementData, markerWidth, markerHeight) {
   element.style.left = (elementData.location.x - markerWidth / 2) + 'px';
   element.style.top = (elementData.location.y - markerHeight) + 'px';
   elementImg.src = elementData.author.avatar;
+  elementImg.style.borderRadius = '50%';
+  elementImg.style.width = '40px';
   element.appendChild(elementImg);
 
   return element;
-}
-
-function appendAds(ads, mapClass) {
-  var map = document.querySelector('.' + mapClass);
-
-  map.appendChild(ads);
 }
 
 function generateLodge(featuredItem) {
@@ -125,7 +121,7 @@ function fillLodgeElement(lodge, element, content) {
 function createAd(adData) {
   var ad = {
     author: {
-      avatar: 'img/avatars/user{{' + adData.imgNum + '}}.png',
+      avatar: 'img/avatars/user' + adData.imgNum + '.png',
     },
     offer: {
       title: adData.offerTitle,
@@ -165,13 +161,20 @@ function generateFeaturesIcons(features) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < features.length; i++) {
-    var feature = document.createElement('span');
-    feature.classList.add('feature__image');
-    feature.classList.add('feature__image--' + features[i]);
-    fragment.appendChild(feature);
+    var icon = createFeatureIcon(features[i]);
+
+    fragment.appendChild(icon);
   }
 
   return fragment;
+}
+
+function createFeatureIcon(feature) {
+  var icon = document.createElement('span');
+  icon.classList.add('feature__image');
+  icon.classList.add('feature__image--' + feature);
+
+  return icon;
 }
 
 function getRandomElements(list) {
