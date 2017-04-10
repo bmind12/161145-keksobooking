@@ -201,3 +201,24 @@ function getRandomIntInclusive(min, max) {
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+// Module 4
+
+map.addEventListener('click', function (evt) {
+  selectActiveAd(evt);
+}, true);
+
+function selectActiveAd(evt) {
+  var active = document.querySelector('.pin--active');
+
+  if (active) {
+    active.classList.remove('pin--active');
+  }
+
+  if (evt.target.classList.contains('pin')) {
+    evt.target.classList.add('pin--active');
+  } else if (evt.target.parentNode.classList.contains('pin')) {
+    evt.target.parentNode.classList.add('pin--active');
+  }
+}
+
+
