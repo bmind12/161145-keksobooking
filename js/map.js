@@ -29,7 +29,7 @@ var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
 var map = document.querySelector('.tokyo__pin-map');
 
-map.appendChild(adsHTML);
+appendAds(map, adsHTML);
 generateLodge(adsList[0]);
 
 function generateAds() {
@@ -93,6 +93,7 @@ function generateLodge(featuredItem) {
     featuredItem.offer.rooms + ' комнатах';
   var timeText = 'Заезд после ' + featuredItem.offer.checkin + ', выезд до ' +
     featuredItem.offer.checkout;
+  var avatarSrc = '' + featuredItem.author.avatar;
 
   fillLodgeElement(lodge, 'title', featuredItem.offer.title);
   fillLodgeElement(lodge, 'address', featuredItem.offer.address);
@@ -109,7 +110,12 @@ function generateLodge(featuredItem) {
     .querySelector('.lodge__features')
     .appendChild(generateFeaturesIcons(featuredItem.offer.features));
 
+  lodgeMockup.querySelector('.dialog__title img').src = avatarSrc;
   lodgeMockup.replaceChild(lodge, lodgeMockup.querySelector('.dialog__panel'));
+}
+
+function appendAds(map, adsHTML) {
+  map.appendChild(adsHTML);
 }
 
 function fillLodgeElement(lodge, element, content) {
