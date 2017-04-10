@@ -29,7 +29,7 @@ var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
 var map = document.querySelector('.tokyo__pin-map');
 
-appendAds(map, adsHTML);
+appendAds();
 generateLodge(adsList[0]);
 
 function generateAds() {
@@ -114,7 +114,7 @@ function generateLodge(featuredItem) {
   lodgeMockup.replaceChild(lodge, lodgeMockup.querySelector('.dialog__panel'));
 }
 
-function appendAds(map, adsHTML) {
+function appendAds() {
   map.appendChild(adsHTML);
 }
 
