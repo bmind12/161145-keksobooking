@@ -24,10 +24,14 @@ var FEATURES_LIST = [
 var AD_LIST_LENGTH = 8;
 var MARKER_WIDTH = 56;
 var MARKER_HEIGHT = 75;
+var ESC_KEY_CODE = 27;
+var ENTER_KEY_CODE = 13;
 
 var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
 var map = document.querySelector('.tokyo__pin-map');
+var dialog = document.querySelector('#offer-dialog');
+var dialogClose = document.querySelector('.dialog__close');
 
 appendAds();
 generateLodge(adsList[0]);
@@ -60,8 +64,16 @@ function generateAds() {
 function generateAdsHTML(list) {
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     var adElement = createAdElement(list[i], MARKER_WIDTH, MARKER_HEIGHT);
+
+    adElement.addEventListener('click', function(evt) {
+      onAdClick(evt, i);
+    });
+
+    adElement.addEventListener('keydown', function(evt) {
+      onAdKeydown(evt, i);
+    });
 
     fragment.appendChild(adElement);
   }
@@ -80,6 +92,7 @@ function createAdElement(elementData, markerWidth, markerHeight) {
   elementImg.style.borderRadius = '50%';
   elementImg.style.width = '40px';
   element.appendChild(elementImg);
+  element.tabIndex = '0';
 
   return element;
 }
@@ -109,6 +122,7 @@ function generateLodge(featuredItem) {
   lodge
     .querySelector('.lodge__features')
     .appendChild(generateFeaturesIcons(featuredItem.offer.features));
+  document.addEventListener('keydown', onDialogKeydown);
 
   lodgeMockup.querySelector('.dialog__title img').src = avatarSrc;
   lodgeMockup.replaceChild(lodge, lodgeMockup.querySelector('.dialog__panel'));
@@ -201,24 +215,56 @@ function getRandomIntInclusive(min, max) {
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
 // Module 4
 
-map.addEventListener('click', function (evt) {
-  selectActiveAd(evt);
-}, true);
+dialogClose.addEventListener('click', function () {
+  diactivateActiveAd();
+  hideDialog();
+});
 
-function selectActiveAd(evt) {
-  var active = document.querySelector('.pin--active');
-
-  if (active) {
-    active.classList.remove('pin--active');
+dialogClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEY_CODE) {
+    diactivateActiveAd();
+    hideDialog();
   }
+});
 
-  if (evt.target.classList.contains('pin')) {
-    evt.target.classList.add('pin--active');
-  } else if (evt.target.parentNode.classList.contains('pin')) {
-    evt.target.parentNode.classList.add('pin--active');
+function onDialogKeydown(evt) {
+  if (evt.keyCode === ESC_KEY_CODE) {
+    diactivateActiveAd();
+    hideDialog();
   }
 }
 
+function hideDialog() {
+  dialog.style.display = 'none';
+}
 
+function showDialog() {
+  dialog.style.display = 'block';
+}
+
+function onAdClick(evt, adNum) {
+  diactivateActiveAd();
+  evt.currentTarget.classList.add('pin--active');
+  showDialog();
+  generateLodge(adsList[adNum]);
+}
+
+function onAdKeydown(evt, adNum) {
+  if (evt.keyCode === ENTER_KEY_CODE) {
+    diactivateActiveAd();
+    evt.currentTarget.classList.add('pin--active');
+    showDialog();
+    generateLodge(adsList[adNum]);
+  }
+}
+
+function diactivateActiveAd() {
+  var activeAd = document.querySelector('.pin--active');
+
+  if (activeAd) {
+    activeAd.classList.remove('pin--active');
+  }
+}
