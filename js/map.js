@@ -67,15 +67,15 @@ function generateAdsHTML(list) {
   for (var i = 0; i < list.length; i++) {
     var adElement = createAdElement(list[i], MARKER_WIDTH, MARKER_HEIGHT);
 
-    (function (i) {
+    (function (markerNum) {
       adElement.addEventListener('click', function (evt) {
-        onAdClick(evt, i);
+        onAdClick(evt, markerNum);
       });
     })(i);
 
-    (function (i) {
+    (function (markerNum) {
       adElement.addEventListener('keydown', function (evt) {
-        onAdKeydown(evt, i);
+        onAdKeydown(evt, markerNum);
       });
     })(i);
 
@@ -104,12 +104,13 @@ function createAdElement(elementData, markerWidth, markerHeight) {
 function generateDialog(featuredItem) {
   var template = document.querySelector('#lodge-template');
   var dialogMockup = document.querySelector('#offer-dialog');
-  var dialog = template.content.cloneNode(true);
   var guestsText = 'Для ' + featuredItem.offer.guests + ' гостей в ' +
     featuredItem.offer.rooms + ' комнатах';
   var timeText = 'Заезд после ' + featuredItem.offer.checkin + ', выезд до ' +
     featuredItem.offer.checkout;
   var avatarSrc = '' + featuredItem.author.avatar;
+
+  dialog = template.content.cloneNode(true);
 
   fillLodgeElement(dialog, 'title', featuredItem.offer.title);
   fillLodgeElement(dialog, 'address', featuredItem.offer.address);
