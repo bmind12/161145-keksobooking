@@ -34,7 +34,7 @@ var dialog = document.querySelector('#offer-dialog');
 var dialogClose = document.querySelector('.dialog__close');
 
 appendAds();
-generateLodge(adsList[0]);
+generateDialog(adsList[0]);
 
 function generateAds() {
   var adList = [];
@@ -64,16 +64,20 @@ function generateAds() {
 function generateAdsHTML(list) {
   var fragment = document.createDocumentFragment();
 
-  for (let i = 0; i < list.length; i++) {
+  for (var i = 0; i < list.length; i++) {
     var adElement = createAdElement(list[i], MARKER_WIDTH, MARKER_HEIGHT);
 
-    adElement.addEventListener('click', function(evt) {
-      onAdClick(evt, i);
-    });
+    (function (i) {
+      adElement.addEventListener('click', function (evt) {
+        onAdClick(evt, i);
+      });
+    })(i);
 
-    adElement.addEventListener('keydown', function(evt) {
-      onAdKeydown(evt, i);
-    });
+    (function (i) {
+      adElement.addEventListener('keydown', function (evt) {
+        onAdKeydown(evt, i);
+      });
+    })(i);
 
     fragment.appendChild(adElement);
   }
@@ -97,35 +101,42 @@ function createAdElement(elementData, markerWidth, markerHeight) {
   return element;
 }
 
-function generateLodge(featuredItem) {
+function generateDialog(featuredItem) {
   var template = document.querySelector('#lodge-template');
-  var lodgeMockup = document.querySelector('#offer-dialog');
-  var lodge = template.content.cloneNode(true);
-
+  var dialogMockup = document.querySelector('#offer-dialog');
+  var dialog = template.content.cloneNode(true);
   var guestsText = 'Для ' + featuredItem.offer.guests + ' гостей в ' +
     featuredItem.offer.rooms + ' комнатах';
   var timeText = 'Заезд после ' + featuredItem.offer.checkin + ', выезд до ' +
     featuredItem.offer.checkout;
   var avatarSrc = '' + featuredItem.author.avatar;
 
-  fillLodgeElement(lodge, 'title', featuredItem.offer.title);
-  fillLodgeElement(lodge, 'address', featuredItem.offer.address);
-  fillLodgeElement(lodge, 'type', translateType(featuredItem.offer.type));
-  fillLodgeElement(lodge, 'rooms-and-guests', guestsText);
-  fillLodgeElement(lodge, 'checkin-time', timeText);
-  fillLodgeElement(lodge, 'description', featuredItem.offer.description);
+  fillLodgeElement(dialog, 'title', featuredItem.offer.title);
+  fillLodgeElement(dialog, 'address', featuredItem.offer.address);
+  fillLodgeElement(dialog, 'type', translateType(featuredItem.offer.type));
+  fillLodgeElement(dialog, 'rooms-and-guests', guestsText);
+  fillLodgeElement(dialog, 'checkin-time', timeText);
+  fillLodgeElement(dialog, 'description', featuredItem.offer.description);
 
-  lodge
+  dialog
     .querySelector('.lodge__price')
     .innerHTML = featuredItem.offer.price + '&#x20bd;/ночь';
 
-  lodge
+  dialog
     .querySelector('.lodge__features')
     .appendChild(generateFeaturesIcons(featuredItem.offer.features));
-  document.addEventListener('keydown', onDialogKeydown);
 
-  lodgeMockup.querySelector('.dialog__title img').src = avatarSrc;
-  lodgeMockup.replaceChild(lodge, lodgeMockup.querySelector('.dialog__panel'));
+  addDialogListeners();
+
+  dialogMockup.querySelector('.dialog__title img').src = avatarSrc;
+  dialogMockup
+    .replaceChild(dialog, dialogMockup.querySelector('.dialog__panel'));
+}
+
+function addDialogListeners() {
+  document.addEventListener('keydown', onDialogKeydown);
+  dialogClose.addEventListener('click', onDialogCloseClick);
+  dialogClose.addEventListener('keydown', onDialogCloseKeydown);
 }
 
 function appendAds() {
@@ -216,19 +227,17 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Module 4
-
-dialogClose.addEventListener('click', function () {
+function onDialogCloseClick() {
   diactivateActiveAd();
   hideDialog();
-});
+}
 
-dialogClose.addEventListener('keydown', function (evt) {
+function onDialogCloseKeydown(evt) {
   if (evt.keyCode === ENTER_KEY_CODE) {
     diactivateActiveAd();
     hideDialog();
   }
-});
+}
 
 function onDialogKeydown(evt) {
   if (evt.keyCode === ESC_KEY_CODE) {
@@ -238,6 +247,9 @@ function onDialogKeydown(evt) {
 }
 
 function hideDialog() {
+  document.removeEventListener('keydown', onDialogKeydown);
+  dialogClose.removeEventListener('click', onDialogCloseClick);
+  dialogClose.removeEventListener('keydown', onDialogCloseKeydown);
   dialog.style.display = 'none';
 }
 
@@ -249,7 +261,7 @@ function onAdClick(evt, adNum) {
   diactivateActiveAd();
   evt.currentTarget.classList.add('pin--active');
   showDialog();
-  generateLodge(adsList[adNum]);
+  generateDialog(adsList[adNum]);
 }
 
 function onAdKeydown(evt, adNum) {
@@ -257,7 +269,7 @@ function onAdKeydown(evt, adNum) {
     diactivateActiveAd();
     evt.currentTarget.classList.add('pin--active');
     showDialog();
-    generateLodge(adsList[adNum]);
+    generateDialog(adsList[adNum]);
   }
 }
 
