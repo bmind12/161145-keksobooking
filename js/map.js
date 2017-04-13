@@ -109,21 +109,20 @@ function generateDialog(featuredItem) {
   var timeText = 'Заезд после ' + featuredItem.offer.checkin + ', выезд до ' +
     featuredItem.offer.checkout;
   var avatarSrc = '' + featuredItem.author.avatar;
+  var dialogClone = template.content.cloneNode(true);
 
-  dialog = template.content.cloneNode(true);
+  fillLodgeElement(dialogClone, 'title', featuredItem.offer.title);
+  fillLodgeElement(dialogClone, 'address', featuredItem.offer.address);
+  fillLodgeElement(dialogClone, 'type', translateType(featuredItem.offer.type));
+  fillLodgeElement(dialogClone, 'rooms-and-guests', guestsText);
+  fillLodgeElement(dialogClone, 'checkin-time', timeText);
+  fillLodgeElement(dialogClone, 'description', featuredItem.offer.description);
 
-  fillLodgeElement(dialog, 'title', featuredItem.offer.title);
-  fillLodgeElement(dialog, 'address', featuredItem.offer.address);
-  fillLodgeElement(dialog, 'type', translateType(featuredItem.offer.type));
-  fillLodgeElement(dialog, 'rooms-and-guests', guestsText);
-  fillLodgeElement(dialog, 'checkin-time', timeText);
-  fillLodgeElement(dialog, 'description', featuredItem.offer.description);
-
-  dialog
+  dialogClone
     .querySelector('.lodge__price')
     .innerHTML = featuredItem.offer.price + '&#x20bd;/ночь';
 
-  dialog
+  dialogClone
     .querySelector('.lodge__features')
     .appendChild(generateFeaturesIcons(featuredItem.offer.features));
 
@@ -131,7 +130,7 @@ function generateDialog(featuredItem) {
 
   dialogMockup.querySelector('.dialog__title img').src = avatarSrc;
   dialogMockup
-    .replaceChild(dialog, dialogMockup.querySelector('.dialog__panel'));
+    .replaceChild(dialogClone, dialogMockup.querySelector('.dialog__panel'));
 }
 
 function addDialogListeners() {
