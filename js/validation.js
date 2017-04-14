@@ -4,7 +4,7 @@ var TYPE_MIN_PRICE = {
   flat: 1000,
   bungalo: 0,
   house: 10000,
-}
+};
 
 var form = document.querySelector('.notice__form');
 var type = form.querySelector('#type');
@@ -13,7 +13,6 @@ var roomNumber = form.querySelector('#room_number');
 var capacity = form.querySelector('#capacity');
 var timeIn = form.querySelector('#time');
 var timeOut = form.querySelector('#timeout');
-var submit = form.querySelector('.form__submit');
 
 timeIn.addEventListener('change', function () {
   timeOut.selectedIndex = timeIn.selectedIndex;
@@ -29,23 +28,23 @@ type.addEventListener('change', function () {
 });
 
 roomNumber.addEventListener('change', function () {
-  var rooms = roomNumber.options[roomNumber.selectedIndex].value;
+  var rooms = Number(roomNumber.options[roomNumber.selectedIndex].value);
   var noGuestsIndex = 1;
   var forGuestsIndex = 0;
-  if (rooms == 1) {
+  if (rooms === 1) {
     capacity.options.selectedIndex = noGuestsIndex;
   } else {
     capacity.options.selectedIndex = forGuestsIndex;
   }
 });
 
-capacity.addEventListener('change', function () {
-  var guests = capacity.options[capacity.selectedIndex].value;
-  var oneRoomIndex = 0;
-  var threeRoomsIndex = 1;
-  if (guests == 0) {
-    roomNumber.options.selectedIndex = oneRoomIndex;
-  } else {
-    roomNumber.options.selectedIndex = threeRoomsIndex;
+form.addEventListener('invalid', function (evt) {
+  evt.target.classList.add('invalid-input');
+}, true);
+
+form.addEventListener('change', function (evt) {
+  var element = evt.target;
+  if (element.validity.valid && element.classList.contains('invalid-input')) {
+    element.classList.remove('invalid-input');
   }
 });
