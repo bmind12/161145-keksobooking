@@ -27,6 +27,18 @@ var MARKER_HEIGHT = 75;
 var ESC_KEY_CODE = 27;
 var ENTER_KEY_CODE = 13;
 
+var addClickListener = function (element, markerNum) {
+  element.addEventListener('click', function (evt) {
+    onAdClick(evt, markerNum);
+  });
+};
+
+var addKeydownListener = function (element, markerNum) {
+  element.addEventListener('keydown', function (evt) {
+    onAdKeydown(evt, markerNum);
+  });
+};
+
 var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
 var map = document.querySelector('.tokyo__pin-map');
@@ -34,7 +46,7 @@ var dialog = document.querySelector('#offer-dialog');
 var dialogClose = document.querySelector('.dialog__close');
 
 appendAds();
-generateLodge(adsList[0]);
+generateDialog(adsList[0]);
 
 function generateAds() {
   var adList = [];
@@ -64,16 +76,11 @@ function generateAds() {
 function generateAdsHTML(list) {
   var fragment = document.createDocumentFragment();
 
-  for (let i = 0; i < list.length; i++) {
+  for (var i = 0; i < list.length; i++) {
     var adElement = createAdElement(list[i], MARKER_WIDTH, MARKER_HEIGHT);
 
-    adElement.addEventListener('click', function(evt) {
-      onAdClick(evt, i);
-    });
-
-    adElement.addEventListener('keydown', function(evt) {
-      onAdKeydown(evt, i);
-    });
+    addClickListener(adElement, i);
+    addKeydownListener(adElement, i);
 
     fragment.appendChild(adElement);
   }
@@ -97,35 +104,42 @@ function createAdElement(elementData, markerWidth, markerHeight) {
   return element;
 }
 
-function generateLodge(featuredItem) {
+function generateDialog(featuredItem) {
   var template = document.querySelector('#lodge-template');
-  var lodgeMockup = document.querySelector('#offer-dialog');
-  var lodge = template.content.cloneNode(true);
-
+  var dialogMockup = document.querySelector('#offer-dialog');
   var guestsText = 'Для ' + featuredItem.offer.guests + ' гостей в ' +
     featuredItem.offer.rooms + ' комнатах';
   var timeText = 'Заезд после ' + featuredItem.offer.checkin + ', выезд до ' +
     featuredItem.offer.checkout;
   var avatarSrc = '' + featuredItem.author.avatar;
+  var dialogClone = template.content.cloneNode(true);
 
-  fillLodgeElement(lodge, 'title', featuredItem.offer.title);
-  fillLodgeElement(lodge, 'address', featuredItem.offer.address);
-  fillLodgeElement(lodge, 'type', translateType(featuredItem.offer.type));
-  fillLodgeElement(lodge, 'rooms-and-guests', guestsText);
-  fillLodgeElement(lodge, 'checkin-time', timeText);
-  fillLodgeElement(lodge, 'description', featuredItem.offer.description);
+  fillLodgeElement(dialogClone, 'title', featuredItem.offer.title);
+  fillLodgeElement(dialogClone, 'address', featuredItem.offer.address);
+  fillLodgeElement(dialogClone, 'type', translateType(featuredItem.offer.type));
+  fillLodgeElement(dialogClone, 'rooms-and-guests', guestsText);
+  fillLodgeElement(dialogClone, 'checkin-time', timeText);
+  fillLodgeElement(dialogClone, 'description', featuredItem.offer.description);
 
-  lodge
+  dialogClone
     .querySelector('.lodge__price')
     .innerHTML = featuredItem.offer.price + '&#x20bd;/ночь';
 
-  lodge
+  dialogClone
     .querySelector('.lodge__features')
     .appendChild(generateFeaturesIcons(featuredItem.offer.features));
-  document.addEventListener('keydown', onDialogKeydown);
 
-  lodgeMockup.querySelector('.dialog__title img').src = avatarSrc;
-  lodgeMockup.replaceChild(lodge, lodgeMockup.querySelector('.dialog__panel'));
+  addDialogListeners();
+
+  dialogMockup.querySelector('.dialog__title img').src = avatarSrc;
+  dialogMockup
+    .replaceChild(dialogClone, dialogMockup.querySelector('.dialog__panel'));
+}
+
+function addDialogListeners() {
+  document.addEventListener('keydown', onDialogKeydown);
+  dialogClose.addEventListener('click', onDialogCloseClick);
+  dialogClose.addEventListener('keydown', onDialogCloseKeydown);
 }
 
 function appendAds() {
@@ -216,19 +230,17 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Module 4
-
-dialogClose.addEventListener('click', function () {
+function onDialogCloseClick() {
   diactivateActiveAd();
   hideDialog();
-});
+}
 
-dialogClose.addEventListener('keydown', function (evt) {
+function onDialogCloseKeydown(evt) {
   if (evt.keyCode === ENTER_KEY_CODE) {
     diactivateActiveAd();
     hideDialog();
   }
-});
+}
 
 function onDialogKeydown(evt) {
   if (evt.keyCode === ESC_KEY_CODE) {
@@ -238,6 +250,9 @@ function onDialogKeydown(evt) {
 }
 
 function hideDialog() {
+  document.removeEventListener('keydown', onDialogKeydown);
+  dialogClose.removeEventListener('click', onDialogCloseClick);
+  dialogClose.removeEventListener('keydown', onDialogCloseKeydown);
   dialog.style.display = 'none';
 }
 
@@ -249,15 +264,12 @@ function onAdClick(evt, adNum) {
   diactivateActiveAd();
   evt.currentTarget.classList.add('pin--active');
   showDialog();
-  generateLodge(adsList[adNum]);
+  generateDialog(adsList[adNum]);
 }
 
 function onAdKeydown(evt, adNum) {
   if (evt.keyCode === ENTER_KEY_CODE) {
-    diactivateActiveAd();
-    evt.currentTarget.classList.add('pin--active');
-    showDialog();
-    generateLodge(adsList[adNum]);
+    onAdClick(evt, adNum);
   }
 }
 
