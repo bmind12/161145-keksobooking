@@ -38,8 +38,8 @@ window.map = (function () {
         draggbleElem.style.top = (draggbleElem.offsetTop - shift.y) + 'px';
         draggbleElem.style.left = (draggbleElem.offsetLeft - shift.x) + 'px';
 
-        var pointerX = parseInt(draggbleElem.style.left) + elemHalfWidth;
-        var pointerY = parseInt(draggbleElem.style.top) + elemHeight;
+        var pointerX = parseInt(draggbleElem.style.left, 10) + elemHalfWidth;
+        var pointerY = parseInt(draggbleElem.style.top, 10) + elemHeight;
         displayAddress(addressElem, pointerX, pointerY);
       };
 
