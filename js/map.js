@@ -27,6 +27,18 @@ var MARKER_HEIGHT = 75;
 var ESC_KEY_CODE = 27;
 var ENTER_KEY_CODE = 13;
 
+var addClickListener = function (element, markerNum) {
+  element.addEventListener('click', function (evt) {
+    onAdClick(evt, markerNum);
+  });
+};
+
+var addKeydownListener = function (element, markerNum) {
+  element.addEventListener('keydown', function (evt) {
+    onAdKeydown(evt, markerNum);
+  });
+};
+
 var adsList = generateAds();
 var adsHTML = generateAdsHTML(adsList);
 var map = document.querySelector('.tokyo__pin-map');
@@ -67,17 +79,8 @@ function generateAdsHTML(list) {
   for (var i = 0; i < list.length; i++) {
     var adElement = createAdElement(list[i], MARKER_WIDTH, MARKER_HEIGHT);
 
-    (function (markerNum) {
-      adElement.addEventListener('click', function (evt) {
-        onAdClick(evt, markerNum);
-      });
-    })(i);
-
-    (function (markerNum) {
-      adElement.addEventListener('keydown', function (evt) {
-        onAdKeydown(evt, markerNum);
-      });
-    })(i);
+    addClickListener(adElement, i);
+    addKeydownListener(adElement, i);
 
     fragment.appendChild(adElement);
   }
@@ -266,10 +269,7 @@ function onAdClick(evt, adNum) {
 
 function onAdKeydown(evt, adNum) {
   if (evt.keyCode === ENTER_KEY_CODE) {
-    diactivateActiveAd();
-    evt.currentTarget.classList.add('pin--active');
-    showDialog();
-    generateDialog(adsList[adNum]);
+    onAdClick(evt, adNum);
   }
 }
 
