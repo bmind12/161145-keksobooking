@@ -27,13 +27,13 @@ var MARKER_HEIGHT = 75;
 var ESC_KEY_CODE = 27;
 var ENTER_KEY_CODE = 13;
 
-var addClickListener = function(element, markerNum) {
+var addClickListener = function (element, markerNum) {
   element.addEventListener('click', function (evt) {
     onAdClick(evt, markerNum);
   });
 };
 
-var addKeydownListener = function(element, markerNum) {
+var addKeydownListener = function (element, markerNum) {
   element.addEventListener('keydown', function (evt) {
     onAdKeydown(evt, markerNum);
   });
