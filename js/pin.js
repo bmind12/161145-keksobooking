@@ -82,7 +82,8 @@ window.pin = (function () {
     diactivateAd();
     evt.currentTarget.classList.add('pin--active');
     window.card.showDialog();
-    window.card.generateDialog(window.adsList[adNum]);
+    window.showCard.generateDialog(window.adsList[adNum]);
+    window.card.addDialogListeners();
   };
 
   var onAdKeydown = function (evt, adNum) {

@@ -73,5 +73,6 @@ window.map = (function () {
 })();
 
 window.pin.appendAds(window.map.mapElement);
-window.card.generateDialog(window.adsList[0]);
+window.showCard.generateDialog(window.adsList[0]);
+window.card.addDialogListeners();
 window.map.makeDraggble(window.map.pinMain, document.querySelector('#address'));
