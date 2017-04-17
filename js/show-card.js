@@ -40,9 +40,9 @@ window.showCard = (function () {
 
   var translateType = function (type) {
     var typeDictionary = {
-      flat: 'Квартира',
-      bungalo: 'Бунгало',
-      house: 'Дом',
+      apartment: 'Квартира',
+      shack: 'Лачуга',
+      palace: 'Дворец',
     };
 
     var translatedType = typeDictionary[type];
