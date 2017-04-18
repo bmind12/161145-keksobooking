@@ -1,31 +1,44 @@
 'use strict';
 
-var TYPE_MIN_PRICE = {
-  flat: 1000,
-  bungalo: 0,
-  house: 10000,
-};
-
 var form = document.querySelector('.notice__form');
-var type = form.querySelector('#type');
-var price = form.querySelector('#price');
+var apartmentType = form.querySelector('#type');
+var pricePerNight = form.querySelector('#price');
 var roomNumber = form.querySelector('#room_number');
 var capacity = form.querySelector('#capacity');
-var timeIn = form.querySelector('#time');
-var timeOut = form.querySelector('#timeout');
+var checkinTime = form.querySelector('#time');
+var checkoutTime = form.querySelector('#timeout');
 
-timeIn.addEventListener('change', function () {
-  timeOut.selectedIndex = timeIn.selectedIndex;
-});
+var syncValues = function (element, value) {
+  element.value = value;
+};
 
-timeOut.addEventListener('change', function () {
-  timeIn.selectedIndex = timeOut.selectedIndex;
-});
+window.syncFileds(
+    checkinTime,
+    checkoutTime,
+    ['12', '13', '14'],
+    ['12', '13', '14'],
+    syncValues
+);
 
-type.addEventListener('change', function () {
-  var minPrice = TYPE_MIN_PRICE[type.value];
-  price.setAttribute('min', minPrice);
-});
+window.syncFileds(
+    checkoutTime,
+    checkinTime,
+    ['12', '13', '14'],
+    ['12', '13', '14'],
+    syncValues
+);
+
+var syncValueWithMin = function (element, value) {
+  element.min = value;
+};
+
+window.syncFileds(
+    apartmentType,
+    pricePerNight,
+    ['apartment', 'shack', 'palace'],
+    [1000, 0, 10000],
+    syncValueWithMin
+);
 
 roomNumber.addEventListener('change', function () {
   var rooms = Number(roomNumber.options[roomNumber.selectedIndex].value);

@@ -11,7 +11,7 @@ window.pin = (function () {
     'Уютное бунгало далеко от моря',
     'Неуютное бунгало по колено в воде'
   ];
-  var TYPE_LIST = ['flat', 'house', 'bungalo'];
+  var TYPE_LIST = ['apartment', 'shack', 'palace'];
   var CHECKIN_LIST = ['12:00', '13:00', '14:00'];
   var CHECKOUT_LIST = ['12:00', '13:00', '14:00'];
   var FEATURES_LIST = [
@@ -63,7 +63,6 @@ window.pin = (function () {
 
     }
     return fragment;
-
   };
 
   var addClickListener = function (element, markerNum) {
@@ -82,7 +81,8 @@ window.pin = (function () {
     diactivateAd();
     evt.currentTarget.classList.add('pin--active');
     window.card.showDialog();
-    window.card.generateDialog(window.adsList[adNum]);
+    window.showCard.generateDialog(window.adsList[adNum]);
+    window.card.addDialogListeners();
   };
 
   var onAdKeydown = function (evt, adNum) {
