@@ -25,6 +25,7 @@ window.pin = (function () {
   var AD_LIST_LENGTH = 8;
   var MARKER_WIDTH = 56;
   var MARKER_HEIGHT = 75;
+  var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
 
   var generateAds = function () {
     var adList = [];
@@ -170,8 +171,10 @@ window.pin = (function () {
     generateAdsHTML: generateAdsHTML,
     appendAds: appendAds,
     diactivateActiveAd: diactivateAd,
+    URL: URL,
   };
 })();
 
-window.adsList = window.pin.generateAds();
+// window.adsList = window.pin.generateAds();
+window.adsList = window.load(window.pin.URL, onLoad);
 window.adsHTML = window.pin.generateAdsHTML(window.adsList);
