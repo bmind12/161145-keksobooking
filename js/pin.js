@@ -1,57 +1,15 @@
 'use strict';
 
 window.pin = (function () {
-  var TITLE_LIST = [
-    'Большая уютная квартира',
-    'Маленькая неуютная квартира',
-    'Огромный прекрасный дворец',
-    'Маленький ужасный дворец',
-    'Красивый гостевой домик',
-    'Некрасивый негостеприимный домик',
-    'Уютное бунгало далеко от моря',
-    'Неуютное бунгало по колено в воде'
-  ];
-  var TYPE_LIST = ['apartment', 'shack', 'palace'];
-  var CHECKIN_LIST = ['12:00', '13:00', '14:00'];
-  var CHECKOUT_LIST = ['12:00', '13:00', '14:00'];
-  var FEATURES_LIST = [
-    'wifi',
-    'dishwasher',
-    'parking',
-    'washer',
-    'elevator',
-    'conditioner'
-  ];
-  var AD_LIST_LENGTH = 8;
+
   var MARKER_WIDTH = 56;
   var MARKER_HEIGHT = 75;
-
-  var generateAds = function () {
-    var adList = [];
-
-    for (var i = 1; i <= AD_LIST_LENGTH; i++) {
-      var newAd = createAd({
-        imgNum: i > 9 ? String(i) : '0' + i,
-        offerTitle: TITLE_LIST[getRandomIntInclusive(0, TITLE_LIST.length - 1)],
-        offerPrice: getRandomIntInclusive(1000, 1000000),
-        offerType: TYPE_LIST[getRandomIntInclusive(0, 2)],
-        offerRooms: getRandomIntInclusive(1, 5),
-        offerGuests: getRandomIntInclusive(1, 10),
-        offerCheckin: CHECKIN_LIST[getRandomIntInclusive(0, 2)],
-        offerCheckout: CHECKOUT_LIST[getRandomIntInclusive(0, 2)],
-        offerFeatures: getRandomElements(FEATURES_LIST),
-        locationX: getRandomIntInclusive(300, 900),
-        locationY: getRandomIntInclusive(100, 500),
-      });
-
-      adList.push(newAd);
-
-    }
-    return adList;
-
-  };
+  var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
 
   var generateAdsHTML = function (list) {
+
+    window.adsList = list;
+
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < list.length; i++) {
@@ -62,7 +20,7 @@ window.pin = (function () {
       fragment.appendChild(adElement);
 
     }
-    return fragment;
+    window.adsHTML = fragment;
   };
 
   var addClickListener = function (element, markerNum) {
@@ -99,33 +57,6 @@ window.pin = (function () {
     }
   };
 
-  var createAd = function (adData) {
-    var ad = {
-      author: {
-        avatar: 'img/avatars/user' + adData.imgNum + '.png',
-      },
-      offer: {
-        title: adData.offerTitle,
-        address: adData.locationX + ', ' + adData.locationY,
-        price: adData.offerPrice,
-        type: adData.offerType,
-        rooms: adData.offerRooms,
-        guests: adData.offerGuests,
-        checkin: adData.offerCheckin,
-        checkout: adData.offerCheckout,
-        features: adData.offerFeatures,
-        description: '',
-        photos: [],
-      },
-      location: {
-        x: adData.locationX,
-        y: adData.locationY,
-      },
-    };
-    return ad;
-
-  };
-
   var createAdElement = function (elementData, markerWidth, markerHeight) {
     var element = document.createElement('div');
     var elementImg = document.createElement('img');
@@ -142,36 +73,56 @@ window.pin = (function () {
 
   };
 
-  var getRandomElements = function (list) {
-    var randomList = [];
-
-    for (var i = 0; i < list.length; i++) {
-      if (Math.random() > 0.5) {
-        randomList.push(list[i]);
-      }
-    }
-    return randomList;
-
-  };
-
-  var getRandomIntInclusive = function (min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-
-  };
-
   var appendAds = function (map) {
     map.appendChild(window.adsHTML);
   };
 
+  var errorMsgFormat = function (element, text) {
+    element.style.position = 'fixed';
+    element.style.top = '0px';
+    element.style.left = '0px';
+    element.style.backgroundColor = '#e53b3b';
+    element.style.color = 'white';
+    element.style.color = 'white';
+    element.style.minHeight = '30px';
+    element.style.width = '100%';
+    element.style.padding = '5px';
+    element.style.boxSizing = 'border-box';
+    element.style.textAlign = 'center';
+    element.style.zIndex = 100;
+    element.textContent = text;
+  };
+
+  var loadError = function (errorMsg) {
+    var errorBlock = document.createElement('div');
+    window.pin.errorMsgFormat(errorBlock, errorMsg);
+    document.body.appendChild(errorBlock);
+  };
+
+  var drawAds = function (ads) {
+    window.pin.generateAdsHTML(ads);
+    window.pin.appendAds(window.map.mapElement);
+    window.showCard.generateDialog(ads[0]);
+    window.card.addDialogListeners();
+    window.map.makeDraggble(
+        window.map.pinMain,
+        document.querySelector('#address')
+    );
+  };
+
   return {
-    generateAds: generateAds,
     generateAdsHTML: generateAdsHTML,
     appendAds: appendAds,
     diactivateActiveAd: diactivateAd,
+    URL: URL,
+    errorMsgFormat: errorMsgFormat,
+    loadError: loadError,
+    drawAds: drawAds,
   };
 })();
 
-window.adsList = window.pin.generateAds();
-window.adsHTML = window.pin.generateAdsHTML(window.adsList);
+window.load(
+    window.pin.URL,
+    window.pin.drawAds,
+    window.pin.loadError
+);
