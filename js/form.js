@@ -36,19 +36,19 @@
   };
 
   window.syncFileds(
-    checkinTime,
-    checkoutTime,
-    ['12', '13', '14'],
-    ['12', '13', '14'],
-    syncValues
+      checkinTime,
+      checkoutTime,
+      ['12', '13', '14'],
+      ['12', '13', '14'],
+      syncValues
   );
 
   window.syncFileds(
-    checkoutTime,
-    checkinTime,
-    ['12', '13', '14'],
-    ['12', '13', '14'],
-    syncValues
+      checkoutTime,
+      checkinTime,
+      ['12', '13', '14'],
+      ['12', '13', '14'],
+      syncValues
   );
 
   var syncValueWithMin = function (element, value) {
@@ -59,10 +59,10 @@
   };
 
   window.syncFileds(
-    apartmentType,
-    pricePerNight,
-    ['apartment', 'shack', 'palace'],
-    [1000, 0, 10000],
-    syncValueWithMin
+      apartmentType,
+      pricePerNight,
+      ['apartment', 'shack', 'palace'],
+      [1000, 0, 10000],
+      syncValueWithMin
   );
 })();

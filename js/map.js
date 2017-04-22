@@ -65,9 +65,10 @@ window.map = (function () {
     });
   };
 
+  makeDraggble(pinMain, document.querySelector('#address'));
+
   return {
     mapElement: mapElement,
     pinMain: pinMain,
-    makeDraggble: makeDraggble,
   };
 })();
