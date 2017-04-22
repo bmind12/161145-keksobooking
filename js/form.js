@@ -53,6 +53,9 @@
 
   var syncValueWithMin = function (element, value) {
     element.min = value;
+    if (pricePerNight.validity.valid && pricePerNight.classList.contains('invalid-input')) {
+      pricePerNight.classList.remove('invalid-input');
+    }
   };
 
   window.syncFileds(
