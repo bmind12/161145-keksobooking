@@ -1,6 +1,11 @@
 'use strict';
 
 window.showCard = (function () {
+  var typeDictionary = {
+    flat: 'Квартира',
+    bungalo: 'Бунгало',
+    house: 'Дом'
+  };
 
   var generateDialog = function (featuredItem) {
     var template = document.querySelector('#lodge-template');
@@ -39,14 +44,7 @@ window.showCard = (function () {
   };
 
   var translateType = function (type) {
-    var typeDictionary = {
-      flat: 'Квартира',
-      bungalo: 'Бунгало',
-      house: 'Дом',
-    };
-
     var translatedType = typeDictionary[type];
-
     return translatedType;
   };
 
