@@ -36,7 +36,7 @@
   var getFeaturesArray = function (checkboxElements) {
     var checkedValues = [];
     for (var i = 0; i < checkboxElements.length; i++) {
-      if (checkboxElements[i].control.checked) {
+      if (checkboxElements[i].control.checked === true) {
         checkedValues.push(checkboxElements[i].control.value);
       }
     }
@@ -52,7 +52,10 @@
   };
 
   var isAnyOrEqual = function (value, comparable) {
-    return (value === 'any' || Number(value) === comparable);
+    if (isNaN(value) === true) {
+      return (value === 'any' || value === comparable);
+    }
+    return (Number(value) === comparable);
   };
 
   var filterAds = function (it) {

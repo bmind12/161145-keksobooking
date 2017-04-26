@@ -2,6 +2,7 @@
 
 window.pin = (function () {
 
+  var INITIAL_ADS_NUMBER = 3;
   var MARKER_WIDTH = 56;
   var MARKER_HEIGHT = 75;
   var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
@@ -38,9 +39,9 @@ window.pin = (function () {
   var onAdClick = function (evt, adNum) {
     diactivateAd();
     evt.currentTarget.classList.add('pin--active');
-    window.card.showDialog();
-    window.showCard.generateDialog(window.adsList[adNum]);
-    window.card.addDialogListeners();
+    window.card.show();
+    window.showCard.generate(window.adsList[adNum]);
+    window.card.addListeners();
   };
 
   var onAdKeydown = function (evt, adNum) {
@@ -52,7 +53,7 @@ window.pin = (function () {
   var diactivateAd = function () {
     var activeAd = document.querySelector('.pin--active');
 
-    if (activeAd) {
+    if (activeAd !== null) {
       activeAd.classList.remove('pin--active');
     }
   };
@@ -95,13 +96,19 @@ window.pin = (function () {
 
   var renderAds = function (ads) {
     removePins(window.map.mapElement);
-    generateAdsHTML(ads);
-    appendAds(window.map.mapElement);
-    window.showCard.generateDialog(ads[0]);
-    window.card.addDialogListeners();
+    if (ads.length > 0) {
+      generateAdsHTML(ads);
+      appendAds(window.map.mapElement);
+      window.showCard.generate(ads[0]);
+      window.card.addListeners();
+    }
   };
 
   var onLoadSuccess = function (data) {
+    data.sort(function () {
+      return 0.5 - Math.random();
+    });
+    data.length = INITIAL_ADS_NUMBER;
     renderAds(data);
   };
 
@@ -127,4 +134,8 @@ window.pin = (function () {
   };
 })();
 
-window.load(window.pin.URL, window.pin.onLoadSuccess, window.pin.onLoadError);
+window.load(
+    window.pin.URL,
+    window.pin.onLoadSuccess,
+    window.pin.onLoadError
+);

@@ -3,8 +3,12 @@
 window.ESC_KEY_CODE = 27;
 window.ENTER_KEY_CODE = 13;
 window.map = (function () {
-  var mapElement = document.querySelector('.tokyo__pin-map');
-  var pinMain = document.querySelector('.pin__main');
+  var MAP_ELEMENT = document.querySelector('.tokyo__pin-map');
+  var MAIN_PIN = document.querySelector('.pin__main');
+  var MAX_LEFT_OFFSET = 300;
+  var MAX_RIGHT_OFFSET = 900;
+  var MAX_TOP_OFFSET = 100;
+  var MAX_BOTTOM_OFFSET = 500;
 
   var makeDraggble = function (draggbleElem, addressElem) {
     draggbleElem.addEventListener('mousedown', function (evt) {
@@ -22,6 +26,23 @@ window.map = (function () {
         element.value = x + ', ' + y;
       };
 
+      var moveItem = function (item, shift) {
+        if (item.offsetTop - shift.y < MAX_TOP_OFFSET) {
+          item.style.top = MAX_TOP_OFFSET + 'px';
+        } else if (item.offsetTop - shift.y > MAX_BOTTOM_OFFSET) {
+          item.style.top = MAX_BOTTOM_OFFSET + 'px';
+        }
+
+        if (item.offsetLeft - shift.x < MAX_LEFT_OFFSET) {
+          item.style.left = MAX_LEFT_OFFSET + 'px';
+        } else if (item.offsetLeft - shift.x > MAX_RIGHT_OFFSET) {
+          item.style.left = MAX_RIGHT_OFFSET + 'px';
+        }
+
+        item.style.top = (item.offsetTop - shift.y) + 'px';
+        item.style.left = (item.offsetLeft - shift.x) + 'px';
+      };
+
       var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
 
@@ -35,11 +56,11 @@ window.map = (function () {
           y: moveEvt.clientY
         };
 
-        draggbleElem.style.top = (draggbleElem.offsetTop - shift.y) + 'px';
-        draggbleElem.style.left = (draggbleElem.offsetLeft - shift.x) + 'px';
+        moveItem(draggbleElem, shift);
 
         var pointerX = parseInt(draggbleElem.style.left, 10) + elemHalfWidth;
         var pointerY = parseInt(draggbleElem.style.top, 10) + elemHeight;
+
         displayAddress(addressElem, pointerX, pointerY);
       };
 
@@ -65,10 +86,10 @@ window.map = (function () {
     });
   };
 
-  makeDraggble(pinMain, document.querySelector('#address'));
+  makeDraggble(MAIN_PIN, document.querySelector('#address'));
 
   return {
-    mapElement: mapElement,
-    pinMain: pinMain,
+    mapElement: MAP_ELEMENT,
+    mainPin: MAIN_PIN,
   };
 })();

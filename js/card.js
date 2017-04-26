@@ -5,42 +5,42 @@ window.card = (function () {
   var dialog = document.querySelector('#offer-dialog');
   var dialogClose = document.querySelector('.dialog__close');
 
-  var onDialogCloseClick = function () {
-    hideDialog();
+  var onCloseClick = function () {
+    hide();
   };
 
-  var onDialogCloseKeydown = function (evt) {
+  var onCloseKeydown = function (evt) {
     if (evt.keyCode === window.ENTER_KEY_CODE) {
-      hideDialog();
+      hide();
     }
   };
 
-  var onDialogKeydown = function (evt) {
+  var onKeydown = function (evt) {
     if (evt.keyCode === window.ESC_KEY_CODE) {
-      hideDialog();
+      hide();
     }
   };
 
-  var addDialogListeners = function () {
-    document.addEventListener('keydown', onDialogKeydown);
-    dialogClose.addEventListener('click', onDialogCloseClick);
-    dialogClose.addEventListener('keydown', onDialogCloseKeydown);
+  var addListeners = function () {
+    document.addEventListener('keydown', onKeydown);
+    dialogClose.addEventListener('click', onCloseClick);
+    dialogClose.addEventListener('keydown', onCloseKeydown);
   };
 
-  var showDialog = function () {
+  var show = function () {
     dialog.style.display = 'block';
   };
 
-  var hideDialog = function () {
+  var hide = function () {
     window.pin.diactivateActiveAd();
-    document.removeEventListener('keydown', onDialogKeydown);
-    dialogClose.removeEventListener('click', onDialogCloseClick);
-    dialogClose.removeEventListener('keydown', onDialogCloseKeydown);
+    document.removeEventListener('keydown', onKeydown);
+    dialogClose.removeEventListener('click', onCloseClick);
+    dialogClose.removeEventListener('keydown', onCloseKeydown);
     dialog.style.display = 'none';
   };
 
   return {
-    showDialog: showDialog,
-    addDialogListeners: addDialogListeners,
+    show: show,
+    addListeners: addListeners,
   };
 })();
