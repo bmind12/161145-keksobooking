@@ -93,36 +93,38 @@ window.pin = (function () {
     element.textContent = text;
   };
 
-  var loadError = function (errorMsg) {
+  var renderAds = function (ads) {
+    removePins(window.map.mapElement);
+    generateAdsHTML(ads);
+    appendAds(window.map.mapElement);
+    window.showCard.generateDialog(ads[0]);
+    window.card.addDialogListeners();
+  };
+
+  var onLoadSuccess = function (data) {
+    renderAds(data);
+  };
+
+  var onLoadError = function (errorMsg) {
     var errorBlock = document.createElement('div');
-    window.pin.errorMsgFormat(errorBlock, errorMsg);
+    errorMsgFormat(errorBlock, errorMsg);
     document.body.appendChild(errorBlock);
   };
 
-  var drawAds = function (ads) {
-    window.pin.generateAdsHTML(ads);
-    window.pin.appendAds(window.map.mapElement);
-    window.showCard.generateDialog(ads[0]);
-    window.card.addDialogListeners();
-    window.map.makeDraggble(
-        window.map.pinMain,
-        document.querySelector('#address')
-    );
+  var removePins = function (map) {
+    var pin;
+    while ((pin = map.querySelector('.pin:not(.pin__main)')) !== null) {
+      pin.parentNode.removeChild(pin);
+    }
   };
 
   return {
-    generateAdsHTML: generateAdsHTML,
-    appendAds: appendAds,
     diactivateActiveAd: diactivateAd,
     URL: URL,
-    errorMsgFormat: errorMsgFormat,
-    loadError: loadError,
-    drawAds: drawAds,
+    onLoadError: onLoadError,
+    onLoadSuccess: onLoadSuccess,
+    renderAds: renderAds,
   };
 })();
 
-window.load(
-    window.pin.URL,
-    window.pin.drawAds,
-    window.pin.loadError
-);
+window.load(window.pin.URL, window.pin.onLoadSuccess, window.pin.onLoadError);
