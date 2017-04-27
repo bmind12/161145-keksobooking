@@ -27,7 +27,7 @@ window.card = (function () {
     dialogClose.addEventListener('keydown', onCloseKeydown);
   };
 
-  var show = function () {
+  var display = function () {
     dialog.style.display = 'block';
   };
 
@@ -40,7 +40,7 @@ window.card = (function () {
   };
 
   return {
-    show: show,
+    display: display,
     addListeners: addListeners,
   };
 })();

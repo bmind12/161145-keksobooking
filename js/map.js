@@ -12,6 +12,7 @@ window.map = (function () {
 
   var makeDraggble = function (draggbleElem, addressElem) {
     draggbleElem.addEventListener('mousedown', function (evt) {
+
       evt.preventDefault();
 
       var elemHeight = draggbleElem.offsetHeight;
@@ -31,16 +32,17 @@ window.map = (function () {
           item.style.top = MAX_TOP_OFFSET + 'px';
         } else if (item.offsetTop - shift.y > MAX_BOTTOM_OFFSET) {
           item.style.top = MAX_BOTTOM_OFFSET + 'px';
+        } else {
+          item.style.top = (item.offsetTop - shift.y) + 'px';
         }
 
         if (item.offsetLeft - shift.x < MAX_LEFT_OFFSET) {
           item.style.left = MAX_LEFT_OFFSET + 'px';
         } else if (item.offsetLeft - shift.x > MAX_RIGHT_OFFSET) {
           item.style.left = MAX_RIGHT_OFFSET + 'px';
+        } else {
+          item.style.left = (item.offsetLeft - shift.x) + 'px';
         }
-
-        item.style.top = (item.offsetTop - shift.y) + 'px';
-        item.style.left = (item.offsetLeft - shift.x) + 'px';
       };
 
       var onMouseMove = function (moveEvt) {
@@ -66,7 +68,6 @@ window.map = (function () {
 
       var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
-
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
       };
