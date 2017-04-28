@@ -30,8 +30,7 @@
 
   form.addEventListener('change', function (evt) {
     var element = evt.target;
-    if (element.validity.valid === true &&
-      element.classList.contains('invalid-input') === true) {
+    if (element.validity.valid && element.classList.contains('invalid-input')) {
       element.classList.remove('invalid-input');
     }
   });
@@ -58,8 +57,8 @@
 
   var syncValueWithMin = function (element, value) {
     element.min = value;
-    if (pricePerNight.validity.valid === true &&
-      pricePerNight.classList.contains('invalid-input') === true) {
+    if (pricePerNight.validity.valid &&
+      pricePerNight.classList.contains('invalid-input')) {
       pricePerNight.classList.remove('invalid-input');
     }
   };

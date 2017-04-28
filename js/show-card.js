@@ -2,7 +2,7 @@
 
 (function () {
 
-  var typeDictionary = {
+  var TYPE_DICTIONARY = {
     flat: 'Квартира',
     bungalo: 'Бунгало',
     house: 'Дом'
@@ -16,15 +16,15 @@
   };
 
   var translateType = function (type) {
-    return typeDictionary[type];
+    return TYPE_DICTIONARY[type];
   };
 
   var generateFeaturesIcons = function (features) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < features.length; i++) {
-      var icon = createFeatureIcon(features[i]);
+    features.forEach(function (it) {
+      var icon = createFeatureIcon(it);
       fragment.appendChild(icon);
-    }
+    });
     return fragment;
   };
 

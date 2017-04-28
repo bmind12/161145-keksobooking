@@ -36,7 +36,7 @@
   var getFeaturesArray = function (checkboxElements) {
     var checkedValues = [];
     checkboxElements.forEach(function (it) {
-      if (it.control.checked === true) {
+      if (it.control.checked) {
         checkedValues.push(it.control.value);
       }
     });
@@ -52,27 +52,27 @@
   };
 
   var isAnyOrEqual = function (value, comparable) {
-    if (isNaN(value) === true) {
+    if (isNaN(value)) {
       return (value === 'any' || value === comparable);
     }
     return (Number(value) === comparable);
   };
 
   var filterAds = function (it) {
-    if (isAnyOrEqual(typeSelected, it.offer.type) === false) {
+    if (isAnyOrEqual(typeSelected, it.offer.type)) {
       return false;
     }
-    if (inPriceRange(it.offer.price, priceRangeSelected) === false) {
+    if (inPriceRange(it.offer.price, priceRangeSelected)) {
       return false;
     }
-    if (isAnyOrEqual(roomsSelected, it.offer.rooms) === false) {
+    if (isAnyOrEqual(roomsSelected, it.offer.rooms)) {
       return false;
     }
-    if (isAnyOrEqual(guestsSelected, it.offer.guests) === false) {
+    if (isAnyOrEqual(guestsSelected, it.offer.guests)) {
       return false;
     }
     if (featuresChecked.length !== 0) {
-      if (hasFilteredFutures(it.offer.features, featuresChecked) === false) {
+      if (hasFilteredFutures(it.offer.features, featuresChecked)) {
         return false;
       }
     }
