@@ -59,20 +59,20 @@
   };
 
   var filterAds = function (it) {
-    if (isAnyOrEqual(typeSelected, it.offer.type)) {
+    if (!isAnyOrEqual(typeSelected, it.offer.type)) {
       return false;
     }
-    if (inPriceRange(it.offer.price, priceRangeSelected)) {
+    if (!inPriceRange(it.offer.price, priceRangeSelected)) {
       return false;
     }
-    if (isAnyOrEqual(roomsSelected, it.offer.rooms)) {
+    if (!isAnyOrEqual(roomsSelected, it.offer.rooms)) {
       return false;
     }
-    if (isAnyOrEqual(guestsSelected, it.offer.guests)) {
+    if (!isAnyOrEqual(guestsSelected, it.offer.guests)) {
       return false;
     }
     if (featuresChecked.length !== 0) {
-      if (hasFilteredFutures(it.offer.features, featuresChecked)) {
+      if (!hasFilteredFutures(it.offer.features, featuresChecked)) {
         return false;
       }
     }
