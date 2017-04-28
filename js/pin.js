@@ -2,25 +2,27 @@
 
 window.pin = (function () {
 
+  var INITIAL_ADS_NUMBER = 3;
   var MARKER_WIDTH = 56;
   var MARKER_HEIGHT = 75;
   var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
+  var adsList = [];
+  var adsHTML;
 
   var generateAdsHTML = function (list) {
 
-    window.adsList = list;
+    adsList = list;
 
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < list.length; i++) {
-      var adElement = createAdElement(list[i], MARKER_WIDTH, MARKER_HEIGHT);
+    list.forEach(function (it, i) {
+      var adElement = createAdElement(it, MARKER_WIDTH, MARKER_HEIGHT);
       addClickListener(adElement, i);
-
       addKeydownListener(adElement, i);
       fragment.appendChild(adElement);
+    });
 
-    }
-    window.adsHTML = fragment;
+    adsHTML = fragment;
   };
 
   var addClickListener = function (element, markerNum) {
@@ -38,9 +40,9 @@ window.pin = (function () {
   var onAdClick = function (evt, adNum) {
     diactivateAd();
     evt.currentTarget.classList.add('pin--active');
-    window.card.showDialog();
-    window.showCard.generateDialog(window.adsList[adNum]);
-    window.card.addDialogListeners();
+    window.card.display();
+    window.showCard(adsList[adNum]);
+    window.card.addListeners();
   };
 
   var onAdKeydown = function (evt, adNum) {
@@ -52,7 +54,7 @@ window.pin = (function () {
   var diactivateAd = function () {
     var activeAd = document.querySelector('.pin--active');
 
-    if (activeAd) {
+    if (activeAd !== null) {
       activeAd.classList.remove('pin--active');
     }
   };
@@ -60,8 +62,8 @@ window.pin = (function () {
   var createAdElement = function (elementData, markerWidth, markerHeight) {
     var element = document.createElement('div');
     var elementImg = document.createElement('img');
-    element.className = 'pin';
 
+    element.className = 'pin';
     element.style.left = (elementData.location.x - markerWidth / 2) + 'px';
     element.style.top = (elementData.location.y - markerHeight) + 'px';
     elementImg.src = elementData.author.avatar;
@@ -69,12 +71,12 @@ window.pin = (function () {
     elementImg.style.width = '40px';
     element.appendChild(elementImg);
     element.tabIndex = '0';
-    return element;
 
+    return element;
   };
 
   var appendAds = function (map) {
-    map.appendChild(window.adsHTML);
+    map.appendChild(adsHTML);
   };
 
   var errorMsgFormat = function (element, text) {
@@ -95,13 +97,19 @@ window.pin = (function () {
 
   var renderAds = function (ads) {
     removePins(window.map.mapElement);
-    generateAdsHTML(ads);
-    appendAds(window.map.mapElement);
-    window.showCard.generateDialog(ads[0]);
-    window.card.addDialogListeners();
+    if (ads.length > 0) {
+      generateAdsHTML(ads);
+      appendAds(window.map.mapElement);
+      window.showCard(ads[0]);
+      window.card.addListeners();
+    }
   };
 
   var onLoadSuccess = function (data) {
+    data.sort(function () {
+      return 0.5 - Math.random();
+    });
+    data.length = INITIAL_ADS_NUMBER;
     renderAds(data);
   };
 
@@ -118,13 +126,12 @@ window.pin = (function () {
     }
   };
 
+  window.load(URL, onLoadSuccess, onLoadError);
+
   return {
     diactivateActiveAd: diactivateAd,
     URL: URL,
     onLoadError: onLoadError,
-    onLoadSuccess: onLoadSuccess,
     renderAds: renderAds,
   };
 })();
-
-window.load(window.pin.URL, window.pin.onLoadSuccess, window.pin.onLoadError);

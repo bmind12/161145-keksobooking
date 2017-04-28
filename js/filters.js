@@ -35,11 +35,11 @@
 
   var getFeaturesArray = function (checkboxElements) {
     var checkedValues = [];
-    for (var i = 0; i < checkboxElements.length; i++) {
-      if (checkboxElements[i].control.checked) {
-        checkedValues.push(checkboxElements[i].control.value);
+    checkboxElements.forEach(function (it) {
+      if (it.control.checked === true) {
+        checkedValues.push(it.control.value);
       }
-    }
+    });
     return checkedValues;
   };
 
@@ -52,24 +52,27 @@
   };
 
   var isAnyOrEqual = function (value, comparable) {
-    return (value === 'any' || Number(value) === comparable);
+    if (isNaN(value) === true) {
+      return (value === 'any' || value === comparable);
+    }
+    return (Number(value) === comparable);
   };
 
   var filterAds = function (it) {
-    if (!isAnyOrEqual(typeSelected, it.offer.type)) {
+    if (isAnyOrEqual(typeSelected, it.offer.type) === false) {
       return false;
     }
-    if (!inPriceRange(it.offer.price, priceRangeSelected)) {
+    if (inPriceRange(it.offer.price, priceRangeSelected) === false) {
       return false;
     }
-    if (!isAnyOrEqual(roomsSelected, it.offer.rooms)) {
+    if (isAnyOrEqual(roomsSelected, it.offer.rooms) === false) {
       return false;
     }
-    if (!isAnyOrEqual(guestsSelected, it.offer.guests)) {
+    if (isAnyOrEqual(guestsSelected, it.offer.guests) === false) {
       return false;
     }
     if (featuresChecked.length !== 0) {
-      if (!hasFilteredFutures(it.offer.features, featuresChecked)) {
+      if (hasFilteredFutures(it.offer.features, featuresChecked) === false) {
         return false;
       }
     }

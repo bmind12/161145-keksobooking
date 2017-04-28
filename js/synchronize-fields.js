@@ -10,9 +10,9 @@
 
     var hashMap = {};
 
-    for (var i = 0; i < values1.length; i++) {
-      hashMap[values1[i]] = values2[i];
-    }
+    values1.forEach(function (it, i) {
+      hashMap[it] = values2[i];
+    });
 
     if (typeof callBack === 'function') {
       field1.addEventListener('change', function () {

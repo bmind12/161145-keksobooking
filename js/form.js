@@ -8,10 +8,10 @@
   var capacity = form.querySelector('#capacity');
   var checkinTime = form.querySelector('#time');
   var checkoutTime = form.querySelector('#timeout');
-  var checkinTimesList = ['12', '13', '14'];
-  var checkoutTimesList = ['12', '13', '14'];
-  var housingTypesList = ['flat', 'bungalo', 'house'];
-  var housingPricesList = [1000, 0, 10000];
+  var CHECKIN_TIMES = ['12', '13', '14'];
+  var CHECKOUT_TIMES = ['12', '13', '14'];
+  var HOUSING_TYPRES = ['flat', 'bungalo', 'house'];
+  var HOUSING_PRICES = [1000, 0, 10000];
 
   roomNumber.addEventListener('change', function () {
     var rooms = Number(roomNumber.options[roomNumber.selectedIndex].value);
@@ -30,7 +30,8 @@
 
   form.addEventListener('change', function (evt) {
     var element = evt.target;
-    if (element.validity.valid && element.classList.contains('invalid-input')) {
+    if (element.validity.valid === true &&
+      element.classList.contains('invalid-input') === true) {
       element.classList.remove('invalid-input');
     }
   });
@@ -42,22 +43,23 @@
   window.syncFileds(
       checkinTime,
       checkoutTime,
-      checkinTimesList,
-      checkoutTimesList,
+      CHECKIN_TIMES,
+      CHECKOUT_TIMES,
       syncValues
   );
 
   window.syncFileds(
       checkoutTime,
       checkinTime,
-      checkoutTimesList,
-      checkinTimesList,
+      CHECKOUT_TIMES,
+      CHECKIN_TIMES,
       syncValues
   );
 
   var syncValueWithMin = function (element, value) {
     element.min = value;
-    if (pricePerNight.validity.valid && pricePerNight.classList.contains('invalid-input')) {
+    if (pricePerNight.validity.valid === true &&
+      pricePerNight.classList.contains('invalid-input') === true) {
       pricePerNight.classList.remove('invalid-input');
     }
   };
@@ -65,8 +67,8 @@
   window.syncFileds(
       housingType,
       pricePerNight,
-      housingTypesList,
-      housingPricesList,
+      HOUSING_TYPRES,
+      HOUSING_PRICES,
       syncValueWithMin
   );
 })();
