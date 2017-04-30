@@ -1,7 +1,8 @@
 'use strict';
 
 window.card = (function () {
-
+  var ESC_KEY_CODE = 27;
+  var ENTER_KEY_CODE = 13;
   var dialog = document.querySelector('#offer-dialog');
   var dialogClose = document.querySelector('.dialog__close');
 
@@ -10,13 +11,13 @@ window.card = (function () {
   };
 
   var onCloseKeydown = function (evt) {
-    if (evt.keyCode === window.ENTER_KEY_CODE) {
+    if (evt.keyCode === ENTER_KEY_CODE) {
       hide();
     }
   };
 
   var onKeydown = function (evt) {
-    if (evt.keyCode === window.ESC_KEY_CODE) {
+    if (evt.keyCode === ESC_KEY_CODE) {
       hide();
     }
   };

@@ -1,7 +1,7 @@
 'use strict';
 
 window.pin = (function () {
-
+  var ENTER_KEY_CODE = 13;
   var INITIAL_ADS_NUMBER = 3;
   var MARKER_WIDTH = 56;
   var MARKER_HEIGHT = 75;
@@ -10,7 +10,6 @@ window.pin = (function () {
   var adsHTML;
 
   var generateAdsHTML = function (list) {
-
     adsList = list;
 
     var fragment = document.createDocumentFragment();
@@ -46,7 +45,7 @@ window.pin = (function () {
   };
 
   var onAdKeydown = function (evt, adNum) {
-    if (evt.keyCode === window.ENTER_KEY_CODE) {
+    if (evt.keyCode === ENTER_KEY_CODE) {
       onAdClick(evt, adNum);
     }
   };
@@ -106,11 +105,11 @@ window.pin = (function () {
   };
 
   var onLoadSuccess = function (data) {
-    data.sort(function () {
+    var adsToDisplay = data.sort(function () {
       return 0.5 - Math.random();
-    });
-    data.length = INITIAL_ADS_NUMBER;
-    renderAds(data);
+    }).slice(0, INITIAL_ADS_NUMBER);
+
+    renderAds(adsToDisplay);
   };
 
   var onLoadError = function (errorMsg) {

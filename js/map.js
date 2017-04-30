@@ -1,7 +1,5 @@
 'use strict';
 
-window.ESC_KEY_CODE = 27;
-window.ENTER_KEY_CODE = 13;
 window.map = (function () {
   var MAP_ELEMENT = document.querySelector('.tokyo__pin-map');
   var MAIN_PIN = document.querySelector('.pin__main');

@@ -25,12 +25,9 @@
   };
 
   var hasFilteredFutures = function (features, filtered) {
-    for (var i = 0; i < filtered.length; i++) {
-      if (features.indexOf(filtered[i]) === -1) {
-        return false;
-      }
-    }
-    return true;
+    return features.filter(function (it) {
+        return filtered.indexOf(it) > -1;
+      }).length === filtered.length;
   };
 
   var getFeaturesArray = function (checkboxElements) {

@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var TYPE_DICTIONARY = {
     flat: 'Квартира',
     bungalo: 'Бунгало',
