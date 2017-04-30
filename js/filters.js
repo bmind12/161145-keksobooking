@@ -26,8 +26,8 @@
 
   var hasFilteredFutures = function (features, filtered) {
     return features.filter(function (it) {
-        return filtered.indexOf(it) > -1;
-      }).length === filtered.length;
+      return filtered.indexOf(it) > -1;
+    }).length === filtered.length;
   };
 
   var getFeaturesArray = function (checkboxElements) {
